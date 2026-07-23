@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TodoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">todo-management-spring-boot</a> &gt; <a href="index.source.html" class="el_package">net.guides.springboot.todomanagement.service</a> &gt; <span class="el_source">TodoService.java</span></div><h1>TodoService.java</h1><pre class="source lang-java linenums">package net.guides.springboot.todomanagement.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import net.guides.springboot.todomanagement.model.Todo;
+import net.guides.springboot.todomanagement.repository.TodoRepository;
+
+@Service
+<span class="nc" id="L14">public class TodoService implements ITodoService {</span>
+
+	@Autowired
+	private TodoRepository todoRepository;
+
+	@Override
+	public List&lt;Todo&gt; getTodosByUser(String user) {
+<span class="nc" id="L21">		return todoRepository.findByUserName(user);</span>
+	}
+
+	@Override
+	public Optional&lt;Todo&gt; getTodoById(long id) {
+<span class="nc" id="L26">		return todoRepository.findById(id);</span>
+	}
+
+	@Override
+	public void updateTodo(Todo todo) {
+<span class="nc" id="L31">		todoRepository.save(todo);</span>
+<span class="nc" id="L32">	}</span>
+
+	@Override
+	public void addTodo(String name, String desc, Date targetDate, boolean isDone) {
+<span class="nc" id="L36">		todoRepository.save(new Todo(name, desc, targetDate, isDone));</span>
+<span class="nc" id="L37">	}</span>
+
+	@Override
+	public void deleteTodo(long id) {
+<span class="nc" id="L41">		Optional&lt;Todo&gt; todo = todoRepository.findById(id);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		if (todo.isPresent()) {</span>
+<span class="nc" id="L43">			todoRepository.delete(todo.get());</span>
+		}
+<span class="nc" id="L45">	}</span>
+
+	@Override
+	public void saveTodo(Todo todo) {
+<span class="nc" id="L49">		todoRepository.save(todo);</span>
+<span class="nc" id="L50">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

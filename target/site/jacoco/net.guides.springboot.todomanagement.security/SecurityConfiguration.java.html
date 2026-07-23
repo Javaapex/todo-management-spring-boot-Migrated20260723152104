@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfiguration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">todo-management-spring-boot</a> &gt; <a href="index.source.html" class="el_package">net.guides.springboot.todomanagement.security</a> &gt; <span class="el_source">SecurityConfiguration.java</span></div><h1>SecurityConfiguration.java</h1><pre class="source lang-java linenums">package net.guides.springboot.todomanagement.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
+@Configuration
+<span class="nc" id="L14">public class SecurityConfiguration{</span>
+	@Autowired
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth)
+            throws Exception {
+<span class="nc" id="L18">        auth.inMemoryAuthentication()</span>
+<span class="nc" id="L19">            .passwordEncoder(NoOpPasswordEncoder.getInstance())</span>
+<span class="nc" id="L20">        		.withUser(&quot;admin&quot;).password(&quot;admin&quot;)</span>
+<span class="nc" id="L21">                .roles(&quot;USER&quot;, &quot;ADMIN&quot;);</span>
+<span class="nc" id="L22">    }</span>
+
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+<span class="nc" id="L26">		http.authorizeRequests(requests -&gt; requests.requestMatchers(&quot;/login&quot;, &quot;/h2-console/**&quot;).permitAll()</span>
+<span class="nc" id="L27">				.requestMatchers(&quot;/&quot;, &quot;/*todo*/**&quot;).access(&quot;hasRole('USER')&quot;))</span>
+<span class="nc" id="L28">				.formLogin(withDefaults());</span>
+
+<span class="nc" id="L30">		http.csrf(csrf -&gt; csrf.disable());</span>
+<span class="nc" id="L31">		http.headers(headers -&gt; headers.frameOptions(options -&gt; options.disable()));</span>
+<span class="nc" id="L32">		return http.build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
